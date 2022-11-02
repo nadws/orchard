@@ -5,7 +5,7 @@ $bulan = date('m');
 $bln2  = $bulan - 1;
 $bln   = date('m', strtotime($bulan.'-1 month'));
 $tahun = date('Y');
-$hari  = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+$hari  = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
 $this->load->view('tema/Header', $title); 
 $today = date('Y-m-d');
 ?>
@@ -46,7 +46,7 @@ $karyawan = $this->db->query("select * from tb_karyawan")->result();
 		<div class="row mb-2">
 			<div class="col-md-12">
 				<?= $this->session->flashdata('message'); ?>
-				<table class="table table-striped table-bordered" width="100%">
+				<table class="table table-striped table-bordered table-responsive" width="100%">
 					<thead>
 						<tr>
 							<th rowspan="2">NAMA</th>
@@ -57,39 +57,56 @@ $karyawan = $this->db->query("select * from tb_karyawan")->result();
 							$dt2 = date('Y-m-26');
 							$dt3 = date('Y-m-d', strtotime($dt2.'-1 month'));
 							?>
-							<?php foreach ($cek as $key => $value): ?>
-								<th><?= $value->tgl ?></th>
-							<?php endforeach ?>
+							<?php for($i=1; $i<=$hari; $i++): ?>
+								<th><?= $i ?></th>
+							<?php endfor; ?>
+							<th>M</th>
+							<th>OFF</th>
+							
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($karyawan as $kry): ?>
+						<?php foreach ($karyawan as $kry): 
+						$m=0;
+						$off=0;
+						?>
 							<tr>
 								<td><strong><?= $kry->nm_kry ?></strong></td>
 								<?php
 								$dt_a = date('Y-m-31');
 								$dt_b = date('Y-m-26');
 								$dt_c = date('Y-m-d', strtotime($dt_b.'-1 month'));
-								$ket = $this->db->get_where(" tb_absen where nm_karyawan = '$kry->nm_kry' and tgl BETWEEN '$dt_c' AND '$dt_a' order by tgl ASC, nm_karyawan ")->result();
+								// $ket = $this->db->get_where(" tb_absen where nm_karyawan = '$kry->nm_kry' and tgl BETWEEN '$dt_c' AND '$dt_a' order by tgl ASC, nm_karyawan ")->result();
 								?>
-								<?php foreach ($ket as $sp): ?>
-									<?php  
-									$cek2 = $this->db->get_where(" tb_tgl where tgl = '$sp->tgl' ")->row();
+								<?php for($i=1; $i<=$hari; $i++): 
+									$keterangan = $this->db->get_where('tb_absen',[
+										'nm_karyawan' => $kry->nm_kry,
+										'tgl' => date('Y-m-').$i
+									])->row();
 									?>
-									<?php if (!empty($cek2)): ?>
-										<td style='background-color:red;'> X </td>
-										<?php else: ?>
-											<?php if ($sp->ket=="OFF"): ?>
-												<td style='background-color:#EA6357;'><?= $sp->ket ?></td>
-												<?php elseif ($sp->ket=="M"): ?>
-												<td style='background-color:#87CCC5;'><?= $sp->ket ?></td>
-												<?php elseif ($sp->ket=="E"): ?>
-												<td style='background-color:#EECE71;'><?= $sp->ket ?></td>
-													<?php else: ?>
-														<td style='background-color:#418674;'><?= $sp->ket ?></td>
-													<?php endif ?>
-												<?php endif ?>
-											<?php endforeach ?>
+									
+									<?php if(!$keterangan && $i > date('d')): 
+										// $off++; ?>
+										<td></td>
+									<!-- <td style='background-color:#EA6357;'>OFF</td> -->
+									<?php elseif(!$keterangan): 
+									$off++; ?>
+									<td style='background-color:#EA6357;'>OFF</td>
+									<?php elseif($keterangan->ket == 'M'): 
+										$m++; ?>
+									<td style='background-color:#87CCC5;'>M</td>
+									<?php elseif($keterangan->ket == 'OFF'): 
+										$off++; ?>
+									<td style='background-color:#EA6357;'>OFF</td>
+									<?php else: ?>
+									<td></td>
+									<?php endif ?>
+
+								<?php endfor; ?>
+								<td><?= $m ?></td>
+									<td><?= $off ?></td>
+
+								
 										</tr>
 
 									<?php endforeach ?>

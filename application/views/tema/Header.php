@@ -50,21 +50,21 @@
   table {
     text-align: left;
     position: relative;
-    border-collapse: collapse;
+    /* border-collapse: collapse; */
     /* font-family: Arial; */
 
   }
-  th, td {
+  /* th, td {
     padding: 0.25rem;
-  }
+  } */
 
   th {
-    background:#F78CA0;
+    background:#fadadd;
     position: sticky;
-    color: white;
+    color: #787878;
     top: 0;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-    border: #F78CA0;
+    /*box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);*/
+    /* border: #F78CA0; */
   }
   /* td {
     text-transform: lowercase;
@@ -96,24 +96,26 @@
   
   body{
     font-family: Arial, Helvetica, sans-serif;
+    color : #787878;
   }
 
 
 </style>
 
-<?php 
+<!-- <?php 
 $beda = $this->session->userdata('salon');
 if(!$beda){
-  header("Location: Login");
+
+  redirect('Login');
   exit;
 }
 
-?>
+?> -->
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light" style=" background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%); color: white;">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light" style=" background:#fadadd; color: #787878;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -138,7 +140,7 @@ if(!$beda){
         </a>
       </li> -->
       <li class="nav-item mr-2">
-                <a href="<?= base_url('Login/logout'); ?>" id="tombolmenu" class="nav-link shadow" style="color: white;"><i class="fas fa-sign-out-alt"></i></a>
+                <a href="<?= base_url('Login/logout'); ?>" id="tombolmenu" class="nav-link shadow"><i class="fas fa-sign-out-alt"></i> Logout</a>
               </li>
       <!-- Notifications Dropdown Menu -->
     </ul>

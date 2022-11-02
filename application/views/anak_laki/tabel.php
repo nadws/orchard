@@ -24,6 +24,7 @@
 							<tr>
 								<th>#</th>
 								<th>NAMA</th>
+								<th>Tanggal Masuk</th>
 								<th>AKSI</th>
 							</tr>
 						</thead>
@@ -33,6 +34,7 @@
 									<tr>
 										<td></td>
 										<td><input style="border:none; border-bottom: solid;" class="form-control" type="text" name="nm_kry" placeholder="Masukkan Nama"></td>
+										<td><input style="border:none; border-bottom: solid;" class="form-control" type="date" name="tgl_masuk" placeholder="Tanggal Masuk"></td>
 										<td>
 											<button type="submit" class="btn btn-primary btn-sm"><span class="fas fa-check"></span></button>
 										</td>
@@ -43,10 +45,19 @@
 						<tbody style="text-align: center;">
 							<?php
 							$i=1;
-							foreach ($laki as $k): ?>
+							foreach ($laki as $k):
+
+						$tgl_masuk    = new DateTime($k->tgl_masuk);
+                        $today        = new DateTime();
+                        $lama_kerja = $today->diff($tgl_masuk);
+                        // echo $lama_kerja->y;
+                        // echo " Tahun ";
+                        
+							?>
 								<tr>
 									<td><?= $i; ?></td>
 									<td><?= $k->nm_kry; ?></td>
+									<td><?= date('d-M-Y', strtotime($k->tgl_masuk)); ?> (<?= $lama_kerja->y ?> Tahun)</td>
 									<td>
 										<?php if ($this->session->userdata('input')=='1'): ?>
 											<a href="" data-toggle="modal" data-target="#modaledit<?= $k->id_kry ?>"><div class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></div></a> 
@@ -77,12 +88,19 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								<div class="form-group" style="font-size: 20px;">
+								<div class="form-group">
 									<input type="hidden" name="id_kry" value="<?=  $d->id_kry ?>">
-									<div class="row">
+									
 										<label>Nama</label><br>	
-										<input style="border:solid; border-bottom: solid;" class="form-control" type="text" name="nm_kry" value="<?=  $d->nm_kry ?>"><hr>	
-									</div>
+										<input class="form-control" type="text" name="nm_kry" value="<?=  $d->nm_kry ?>">	
+									
+								</div>
+								<div class="form-group">
+									<input type="hidden" name="id_kry" value="<?=  $d->id_kry ?>">
+									
+										<label>Tanggal masuk</label><br>	
+										<input class="form-control" type="date" name="tgl_masuk" value="<?=  $d->tgl_masuk ?>">	
+									
 								</div>
 								<div class="modal-footer justify-content-between">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
